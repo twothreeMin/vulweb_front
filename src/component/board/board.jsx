@@ -1,11 +1,11 @@
 import ArticleList from "./articleList";
 import Pagination from "./pagination";
 
-export default function Board() {
+export const Board = () => {
   return (
     <>
       <ArticleList />
       <Pagination />
     </>
   );
-}
+};

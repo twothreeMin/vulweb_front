@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import axios from "axios";
 
 const user = {
   name: "Tom Cook",
@@ -16,25 +17,26 @@ const navigation = [
 ];
 const userNavigation = [
   { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
+  { name: "Sign out", href: "http://localhost:8080/api/member/signout" },
 ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Navigate() {
+export const AppNavigate = (props) => {
+  // const onClickHandler = () => {
+  //   axios.get("/api/member/signout").then((response) => {
+  //     if (response.data.success) {
+  //       props.history.push("/login");
+  //     } else {
+  //       alert("Error");
+  //     }
+  //   });
+  // };
+
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-gray-100">
-        <body class="h-full">
-        ```
-      */}
       <div className="min-h-full">
         <Disclosure as="nav" className="bg-gray-800">
           {({ open }) => (
@@ -104,15 +106,19 @@ export default function Navigate() {
                             {userNavigation.map((item) => (
                               <Menu.Item key={item.name}>
                                 {({ active }) => (
-                                  <a
-                                    href={item.href}
+                                  <button
                                     className={classNames(
                                       active ? "bg-gray-100" : "",
                                       "block px-4 py-2 text-sm text-gray-700"
                                     )}
+                                    // onClick={
+                                    //   item.name == "Sign out"
+                                    //     ? onClickHandler
+                                    //     : ""
+                                    // }
                                   >
                                     {item.name}
-                                  </a>
+                                  </button>
                                 )}
                               </Menu.Item>
                             ))}
@@ -218,4 +224,4 @@ export default function Navigate() {
       </div>
     </>
   );
-}
+};

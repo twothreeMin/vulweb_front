@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import GoogleLogin from "../static/images/btn_google_signin_dark_normal_web.png";
 
 export default function Login() {
   const [form, setForm] = useState({
@@ -123,7 +122,7 @@ export default function Login() {
               <div className="py-1">
                 <button
                   type="button"
-                  class="py-2 flex justify-center items-center bg-red-600 
+                  className="py-2 flex justify-center items-center bg-red-600 
                 hover:bg-red-700 focus:ring-red-500 focus:ring-offset-red-200 
                 text-white w-full transition ease-in 
                 duration-200 text-center text-sm font-semibold shadow-md 
@@ -134,7 +133,7 @@ export default function Login() {
                     width="20"
                     height="20"
                     fill="currentColor"
-                    class="mr-2"
+                    className="mr-2"
                     viewBox="0 0 1792 1792"
                     xmlns="http://www.w3.org/2000/svg"
                   >
