@@ -1,9 +1,7 @@
 import React, { createContext, useState, useEffect, useMemo } from "react";
 import axios from "axios";
 
-export const AuthContext = createContext({
-  setIsAuthenticated: () => {},
-});
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
