@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const user = {
@@ -17,7 +18,7 @@ const navigation = [
 ];
 const userNavigation = [
   { name: "Your Profile", href: "#" },
-  { name: "Sign out", href: "http://localhost:8080/api/member/signout" },
+  { name: "Sign out", href: "#" },
 ];
 
 function classNames(...classes) {
@@ -25,15 +26,23 @@ function classNames(...classes) {
 }
 
 export const AppNavigate = (props) => {
-  // const onClickHandler = () => {
-  //   axios.get("/api/member/signout").then((response) => {
-  //     if (response.data.success) {
-  //       props.history.push("/login");
-  //     } else {
-  //       alert("Error");
-  //     }
-  //   });
-  // };
+  const navigate = useNavigate();
+  const token = localStorage.getItem("access_token");
+
+  const onClickHandler = () => {
+    axios({
+      method: "post",
+      url: "http://localhost:8080/api/member/signout",
+      headers: { Authorization: `Bearer ${token}` },
+    }).then((response) => {
+      if (response.data.success) {
+        localStorage.removeItem("access_token");
+        navigate("/login");
+      } else {
+        alert("Error");
+      }
+    });
+  };
 
   return (
     <>
@@ -111,11 +120,11 @@ export const AppNavigate = (props) => {
                                       active ? "bg-gray-100" : "",
                                       "block px-4 py-2 text-sm text-gray-700"
                                     )}
-                                    // onClick={
-                                    //   item.name == "Sign out"
-                                    //     ? onClickHandler
-                                    //     : ""
-                                    // }
+                                    onClick={
+                                      item.name == "Sign out"
+                                        ? onClickHandler
+                                        : ""
+                                    }
                                   >
                                     {item.name}
                                   </button>

@@ -2,15 +2,6 @@ import { AppNavigate } from "../component/appNavigate";
 import { Board } from "../component/board/board";
 
 export const DashBoardPage = () => {
-  // const { isAuthenticated } = useContext(AuthContext);
-  // console.log(isAuthenticated);
-  // const navigate = useNavigate();
-
-  // console.log(`DashBoardPage 로그 : ${isAuthenticated}`);
-  // if (!isAuthenticated) {
-  //   navigate("/login");
-  // }
-
   return (
     <>
       <AppNavigate />
