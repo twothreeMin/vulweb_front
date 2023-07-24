@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -28,6 +29,34 @@ function classNames(...classes) {
 export const AppNavigate = (props) => {
   const navigate = useNavigate();
   const token = localStorage.getItem("access_token");
+
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    picture_url: "",
+    authority: "",
+  });
+
+  useEffect(() => {
+    console.log("appNavigate!! : ", token);
+    axios({
+      method: "get",
+      url: "http://localhost:8080/api/member/info",
+      headers: { Authorization: `Bearer ${token}` },
+    }).then((response) => {
+      if (response.data) {
+        setUser({
+          name: response.data.nickname,
+          email: response.data.email,
+          picture_url: response.data.picture_url,
+          authority: response.data.authority,
+        });
+        console.log(response.data);
+      } else {
+        alert("Error");
+      }
+    });
+  }, [token]);
 
   const onClickHandler = () => {
     axios({
@@ -121,7 +150,7 @@ export const AppNavigate = (props) => {
                                       "block px-4 py-2 text-sm text-gray-700"
                                     )}
                                     onClick={
-                                      item.name == "Sign out"
+                                      item.name === "Sign out"
                                         ? onClickHandler
                                         : ""
                                     }
