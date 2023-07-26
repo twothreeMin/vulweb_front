@@ -28,15 +28,16 @@ function classNames(...classes) {
 
 export const AppNavigate = (props) => {
   const navigate = useNavigate();
-  const token = localStorage.getItem("access_token");
+  let token = localStorage.getItem("access_token");
 
-  const [user, setUser] = useState({
+  const [member, setMember] = useState({
     name: "",
     email: "",
     picture_url: "",
     authority: "",
   });
 
+  //member 정보 가져오기
   useEffect(() => {
     console.log("appNavigate!! : ", token);
     axios({
@@ -45,7 +46,7 @@ export const AppNavigate = (props) => {
       headers: { Authorization: `Bearer ${token}` },
     }).then((response) => {
       if (response.data) {
-        setUser({
+        setMember({
           name: response.data.nickname,
           email: response.data.email,
           picture_url: response.data.picture_url,
@@ -58,6 +59,7 @@ export const AppNavigate = (props) => {
     });
   }, [token]);
 
+  //클릭 시 로그아웃
   const onClickHandler = () => {
     axios({
       method: "post",
@@ -126,7 +128,7 @@ export const AppNavigate = (props) => {
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
-                              src={user.imageUrl}
+                              src={member.picture_url}
                               alt=""
                             />
                           </Menu.Button>
@@ -209,16 +211,16 @@ export const AppNavigate = (props) => {
                     <div className="flex-shrink-0">
                       <img
                         className="h-10 w-10 rounded-full"
-                        src={user.imageUrl}
+                        src={member.picture_url}
                         alt=""
                       />
                     </div>
                     <div className="ml-3">
-                      <div className="text-base font-medium leading-none text-white">
-                        {user.name}
+                      <div className="text-base text-left font-medium leading-none text-white">
+                        {member.name}
                       </div>
                       <div className="text-sm font-medium leading-none text-gray-400">
-                        {user.email}
+                        {member.email}
                       </div>
                     </div>
                     <button
@@ -246,7 +248,6 @@ export const AppNavigate = (props) => {
             </>
           )}
         </Disclosure>
-
         <header className="bg-white shadow">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">

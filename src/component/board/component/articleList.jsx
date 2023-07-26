@@ -22,9 +22,16 @@ const boards = [
     author: "윤채은",
     link: "#userProfile3",
   },
+  {
+    title: "공지사항 4",
+    picture:
+      "https://fancytailwind.com/static/profile8-34d5f5980ca5030c155a2ffbb50b5802.jpg",
+    author: "박재형",
+    link: "#userProfile4",
+  },
 ];
 
-export default function ArticleList() {
+export const ArticleList = () => {
   return (
     <div className="mx-auto w-full max-w-5xl bg-white">
       <ul className="flex flex-col">
@@ -71,4 +78,4 @@ export default function ArticleList() {
       </ul>
     </div>
   );
-}
+};

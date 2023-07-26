@@ -27,6 +27,13 @@ const AppRoutes = () => {
     if (token) {
       localStorage.setItem("access_token", token);
       checkAuth(); // 토큰이 있다면 인증 상태를 체크합니다.
+
+      searchParams.delete("token");
+      const newURL = `${window.location.protocol}//${window.location.host}${
+        window.location.pathname
+      }${searchParams.toString()}`;
+      window.history.pushState({}, "", newURL);
+
       console.log(`AppRoutes useEffect !! : ${isAuthenticated}`);
     }
   }, [location, checkAuth]);
