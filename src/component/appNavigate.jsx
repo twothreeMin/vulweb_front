@@ -44,6 +44,7 @@ export const AppNavigate = (props) => {
       method: "get",
       url: "http://localhost:8080/api/member/info",
       headers: { Authorization: `Bearer ${token}` },
+      "Content-Type": "application/json",
     }).then((response) => {
       if (response.data) {
         setMember({
@@ -65,6 +66,7 @@ export const AppNavigate = (props) => {
       method: "post",
       url: "http://localhost:8080/api/member/signout",
       headers: { Authorization: `Bearer ${token}` },
+      "Content-Type": "application/json",
     }).then((response) => {
       if (response.data.success) {
         localStorage.removeItem("access_token");
@@ -211,6 +213,7 @@ export const AppNavigate = (props) => {
                     <div className="flex-shrink-0">
                       <img
                         className="h-10 w-10 rounded-full"
+                        referrerPolicy="no-referrer"
                         src={member.picture_url}
                         alt=""
                       />
