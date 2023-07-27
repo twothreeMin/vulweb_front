@@ -51,7 +51,7 @@ const AppRoutes = () => {
         path="/board"
         element={isAuthenticated ? <DashBoardPage /> : <LoginPage />}
       />
-      <Route path="*" element={<ErrorPage />} />
+      <Route path="/*" element={<ErrorPage />} />
     </Routes>
   );
 };

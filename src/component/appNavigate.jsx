@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
+import { useMemberStore } from "../store/auth.js";
 import axios from "axios";
 
 const user = {
@@ -29,35 +30,12 @@ function classNames(...classes) {
 export const AppNavigate = (props) => {
   const navigate = useNavigate();
   let token = localStorage.getItem("access_token");
-
-  const [member, setMember] = useState({
-    name: "",
-    email: "",
-    picture_url: "",
-    authority: "",
-  });
+  const { member, fetchMemberInfo } = useMemberStore();
 
   //member 정보 가져오기
   useEffect(() => {
     console.log("appNavigate!! : ", token);
-    axios({
-      method: "get",
-      url: "http://localhost:8080/api/member/info",
-      headers: { Authorization: `Bearer ${token}` },
-      "Content-Type": "application/json",
-    }).then((response) => {
-      if (response.data) {
-        setMember({
-          name: response.data.nickname,
-          email: response.data.email,
-          picture_url: response.data.picture_url,
-          authority: response.data.authority,
-        });
-        console.log(response.data);
-      } else {
-        alert("Error");
-      }
-    });
+    fetchMemberInfo(token);
   }, [token]);
 
   //클릭 시 로그아웃
@@ -130,7 +108,7 @@ export const AppNavigate = (props) => {
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
-                              src={member.picture_url}
+                              src={member?.picture_url}
                               alt=""
                             />
                           </Menu.Button>
@@ -214,16 +192,16 @@ export const AppNavigate = (props) => {
                       <img
                         className="h-10 w-10 rounded-full"
                         referrerPolicy="no-referrer"
-                        src={member.picture_url}
+                        src={member?.picture_url}
                         alt=""
                       />
                     </div>
                     <div className="ml-3">
                       <div className="text-base text-left font-medium leading-none text-white">
-                        {member.name}
+                        {member?.name}
                       </div>
                       <div className="text-sm font-medium leading-none text-gray-400">
-                        {member.email}
+                        {member?.email}
                       </div>
                     </div>
                     <button
