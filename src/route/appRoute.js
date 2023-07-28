@@ -19,6 +19,7 @@ const AppRoutes = () => {
   const location = useLocation();
   const checkAuth = useAuthStore((state) => state.checkAuth);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const isLoading = useAuthStore((state) => state.isLoading);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -26,17 +27,19 @@ const AppRoutes = () => {
 
     if (token) {
       localStorage.setItem("access_token", token);
-      checkAuth(); // 토큰이 있다면 인증 상태를 체크합니다.
-
       searchParams.delete("token");
       const newURL = `${window.location.protocol}//${window.location.host}${
         window.location.pathname
       }${searchParams.toString()}`;
       window.history.pushState({}, "", newURL);
-
-      console.log(`AppRoutes useEffect !! : ${isAuthenticated}`);
     }
+
+    checkAuth(); // 페이지가 로드될 때마다 인증 상태를 체크합니다.
   }, [location, checkAuth]);
+
+  if (isLoading) {
+    return null; // 로딩 중일 때는 아무 것도 보여주지 않습니다
+  }
 
   console.log(`AppRoutes : ${isAuthenticated}`);
 
@@ -46,6 +49,7 @@ const AppRoutes = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/home" element={<LoginPage />} />
       <Route path="/signin" element={<LoginPage />} />
+
       <Route path="/signup" element={<SignupPage />} />
       <Route
         path="/board"

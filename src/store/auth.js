@@ -3,6 +3,7 @@ import axios from "axios";
 
 export const useAuthStore = create((set) => ({
   isAuthenticated: null,
+  isLoading: true,
   setAuthenticated: (value) => set({ isAuthenticated: value }),
   checkAuth: async () => {
     try {
@@ -11,9 +12,9 @@ export const useAuthStore = create((set) => ({
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       });
-      set({ isAuthenticated: response.data.isAuthenticated });
+      set({ isAuthenticated: response.data.isAuthenticated, isLoading: false });
     } catch (error) {
-      set({ isAuthenticated: false });
+      set({ isAuthenticated: false, isLoading: false });
     }
   },
 }));

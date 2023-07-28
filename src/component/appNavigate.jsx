@@ -3,7 +3,8 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
-import { useMemberStore } from "../store/auth.js";
+import { useMemberStore } from "../store/auth";
+import { useAuthStore } from "../store/auth";
 import axios from "axios";
 
 const user = {
@@ -31,6 +32,7 @@ export const AppNavigate = (props) => {
   const navigate = useNavigate();
   let token = localStorage.getItem("access_token");
   const { member, fetchMemberInfo } = useMemberStore();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   //member 정보 가져오기
   useEffect(() => {
@@ -48,6 +50,7 @@ export const AppNavigate = (props) => {
     }).then((response) => {
       if (response.data.success) {
         localStorage.removeItem("access_token");
+        useAuthStore.getState().setAuthenticated(false);
         navigate("/login");
       } else {
         alert("Error");

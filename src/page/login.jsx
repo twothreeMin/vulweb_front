@@ -1,15 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+import { useAuthStore } from "../store/auth";
+
 export default function Login() {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("Login PAGE !!! ", isAuthenticated);
+    if (isAuthenticated) {
+      navigate("/board");
+    }
+  }, [isAuthenticated, navigate]);
+
   const [form, setForm] = useState({
     username: "",
     password: "",
   });
-
-  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setForm({
@@ -28,11 +39,11 @@ export default function Login() {
       );
 
       if (response.status === 200) {
-        navigate("/home");
+        navigate("/board");
       }
     } catch (error) {
       console.error(error);
-      toast.error("회원가입에 실패했습니다.");
+      toast.error("아이디 혹은 비밀번호가 틀립니다.");
     }
   };
 
