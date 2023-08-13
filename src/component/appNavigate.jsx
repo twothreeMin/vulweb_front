@@ -29,7 +29,7 @@ const navigation = [
 ];
 
 const userNavigation = [
-  { name: "내 프로필", href: "#" },
+  { name: "내 프로필", href: "/profile" },
   { name: "로그아웃", href: "#" },
 ];
 
@@ -49,6 +49,11 @@ export const AppNavigate = (props) => {
     console.log("appNavigate!! : ", token);
     fetchMemberInfo(token);
   }, [token]);
+
+  //클릭 시 프로필이동
+  const onClickMoveProfilePage = () => {
+    navigate("/profile");
+  };
 
   //클릭 시 로그아웃
   const onClickSignOutHandler = () => {
@@ -157,7 +162,7 @@ export const AppNavigate = (props) => {
                                     onClick={
                                       item.name === "로그아웃"
                                         ? onClickSignOutHandler
-                                        : ""
+                                        : onClickMoveProfilePage
                                     }
                                   >
                                     {item.name}
@@ -254,9 +259,9 @@ export const AppNavigate = (props) => {
         </Disclosure>
         <header className="bg-white shadow">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              게시판
-            </h1>
+            <h3 className="text-3xl font-bold tracking-tight text-gray-900">
+              {member?.name}님 반갑습니다!!
+            </h3>
           </div>
         </header>
         <main>

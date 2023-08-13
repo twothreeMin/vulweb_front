@@ -16,6 +16,7 @@ import { ArticleDetailPage } from "../page/articleDetailPage";
 import { DashBoardPage } from "../page/dashBoardPage";
 import { BoardEditorPage } from "../page/boardEditorPage";
 import { ManagerPage } from "../page/managerPage";
+import { ProfilePage } from "../page/profilePage";
 
 const AppRoutes = () => {
   console.log(`AppRoutes 렌더링`);
@@ -38,7 +39,7 @@ const AppRoutes = () => {
     }
 
     checkAuth(); // 페이지가 로드될 때마다 인증 상태를 체크합니다.
-  }, [checkAuth]);
+  }, []);
 
   if (isLoading) {
     return null; // 로딩 중일 때는 아무 것도 보여주지 않습니다
@@ -59,7 +60,15 @@ const AppRoutes = () => {
         element={isAuthenticated ? <DashBoardPage /> : <LoginPage />}
       />
       <Route
+        path="/profile"
+        element={isAuthenticated ? <ProfilePage /> : <LoginPage />}
+      />
+      <Route
         path="/boardEditor"
+        element={isAuthenticated ? <BoardEditorPage /> : <LoginPage />}
+      />
+      <Route
+        path="/boardEditor/:id"
         element={isAuthenticated ? <BoardEditorPage /> : <LoginPage />}
       />
       <Route

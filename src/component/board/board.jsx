@@ -29,7 +29,7 @@ export const Board = () => {
     <>
       <EditorButton />
       <ArticleList />
-      <Pagination />
+      {/* <Pagination /> */}
     </>
   );
 };

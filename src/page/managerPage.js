@@ -1,4 +1,5 @@
 import { useMemberStore } from "../store/auth";
+import { AppNavigate } from "../component/appNavigate";
 
 export const ManagerPage = () => {
   const memberInfo = useMemberStore((state) => state.member);
@@ -6,6 +7,7 @@ export const ManagerPage = () => {
 
   return (
     <>
+      <AppNavigate />
       {memberInfo?.authority === "ROLE_MANAGER" ? (
         <>
           <h1>관리자 페이지입니다.</h1>

@@ -25,7 +25,7 @@ export const ArticleList = () => {
     <div className="mx-auto w-full max-w-5xl bg-white">
       <ul className="flex flex-col">
         {boards.map((board) => (
-          <li key={board.title} className="border-b-2 border-gray-100">
+          <li key={board.id} className="border-b-2 border-gray-100">
             <Link to={`/article/${board.id}`}>
               <div
                 className={`py-5 px-4 flex justify-between border-l-4 border-transparent bg-transparent 

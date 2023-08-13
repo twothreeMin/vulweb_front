@@ -1,19 +1,51 @@
+import React, { useEffect } from "react";
+
 import { useArticleReqStore } from "../../../store/article";
+import { useNavigate, useParams } from "react-router-dom";
 
 import axios from "axios";
 
 export const Writer = () => {
+  const navigate = useNavigate();
+  const { id } = useParams(); // URL에서 게시글 ID 가져오기
+
   const { title, content, setTitle, setContent, resetFields } =
     useArticleReqStore();
   const token = localStorage.getItem("access_token");
 
-  const addArticleSubmit = async (e) => {
+  useEffect(() => {
+    //수정하기 페이지 접근 후 다시 작성페이지 접근 시 내용 남는 이슈 방지
+    resetFields();
+    // 컴포넌트가 마운트될 때 게시글 데이터 가져오기
+    const fetchArticleData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/article/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setTitle(response.data.title);
+        setContent(response.data.content);
+      } catch (error) {
+        console.error("Error fetching article:", error);
+      }
+    };
+    if (id) fetchArticleData(); // 만약 id가 있을 경우(수정 모드일 경우) 데이터를 가져옵니다
+  }, [id, setTitle, setContent, token]);
+
+  const addOrEditArticleSubmit = async (e) => {
     e.preventDefault();
-    console.log("addArticleSubmit!!!");
+
+    const url = id
+      ? `http://localhost:8080/api/update/article/${id}`
+      : "http://localhost:8080/api/create/article";
 
     try {
       const response = await axios.post(
-        "/api/create/article",
+        url,
         {
           title: title,
           content: content,
@@ -25,9 +57,10 @@ export const Writer = () => {
           },
         }
       );
-      if (response.status === 201) {
+      if (response.status === 201 || response.status === 200) {
         console.log("Article created successfully:", response.data);
         resetFields();
+        navigate("/board");
       }
     } catch (error) {
       console.error("Error creating article:", error);
@@ -36,11 +69,11 @@ export const Writer = () => {
 
   return (
     <div className="mx-auto w-full max-w-5xl bg-white">
-      <form onSubmit={addArticleSubmit}>
+      <form onSubmit={addOrEditArticleSubmit}>
         <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50">
           <div className="mb-6">
             <label
-              for="title"
+              htmlFor="title"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               Default input
