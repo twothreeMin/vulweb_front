@@ -36,3 +36,27 @@ export const useArticleReqStore = create((set) => ({
   setContent: (content) => set({ content }),
   resetFields: () => set({ title: "", content: "" }),
 }));
+
+export const useArticleDetailStore = create((set) => ({
+  article: {},
+  error: null,
+  isLoading: false,
+  fetchArticle: async (id) => {
+    try {
+      set({ isLoading: true, error: null }); // 로딩 상태를 true로 설정합니다
+      const response = await axios.get(
+        `http://localhost:8080/api/article/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+
+      set({ article: response.data, isLoading: false }); // 데이터를 가져오고 로딩 상태를 false로 설정합니다
+    } catch (error) {
+      set({ error, isLoading: false }); // 에러를 설정하고 로딩 상태를 false로 설정합니다
+      console.error("There was an error fetching the article:", error);
+    }
+  },
+}));

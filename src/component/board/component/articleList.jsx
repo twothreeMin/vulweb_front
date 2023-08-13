@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import moment from "moment";
 import { useArticleListStore } from "../../../store/article";
+import { Link } from "react-router-dom";
 
 // 0:
 // author: "이상민"
@@ -25,40 +26,42 @@ export const ArticleList = () => {
       <ul className="flex flex-col">
         {boards.map((board) => (
           <li key={board.title} className="border-b-2 border-gray-100">
-            <div
-              className={`py-5 px-4 flex justify-between border-l-4 border-transparent bg-transparent 
-              hover:border-green-400 hover:bg-gray-200`}
-            >
-              {/* :USER DETAILS */}
-              <div className="sm:pl-4 pr-8 flex sm:items-center">
-                {/* ::User Picture */}
-                <img
-                  src={board?.authorPicture}
-                  alt=""
-                  referrerPolicy="no-referrer"
-                  className="mr-3 w-8 sm:w-12 h-8 sm:h-12 rounded-full"
-                />
-                {/* ::User Infos */}
-                <div className="space-y-1">
-                  {/* :::name */}
-                  <p className="text-base text-gray-700 font-bold tracking-wide">
-                    {board.title}
+            <Link to={`/article/${board.id}`}>
+              <div
+                className={`py-5 px-4 flex justify-between border-l-4 border-transparent bg-transparent 
+                hover:border-green-400 hover:bg-gray-200`}
+              >
+                {/* :USER DETAILS */}
+                <div className="sm:pl-4 pr-8 flex sm:items-center">
+                  {/* ::User Picture */}
+                  <img
+                    src={board?.authorPicture}
+                    alt=""
+                    referrerPolicy="no-referrer"
+                    className="mr-3 w-8 sm:w-12 h-8 sm:h-12 rounded-full"
+                  />
+                  {/* ::User Infos */}
+                  <div className="space-y-1">
+                    {/* :::name */}
+                    <p className="text-base text-gray-700 font-bold tracking-wide">
+                      {board.title}
+                    </p>
+                  </div>
+                </div>
+
+                {/* :USER STATUS & BUTTON */}
+                <div className="pr-4 flex flex-col justify-between items-end">
+                  {/* ::User Online Status */}
+                  {/* ::Details button */}
+                  <p className="text-sm text-gray-500 font-medium">
+                    {board.author}
+                  </p>
+                  <p className="text-sm text-gray-500 font-semibold hover:underline hover:text-gray-700">
+                    {moment(board.createdDate).fromNow()}
                   </p>
                 </div>
               </div>
-
-              {/* :USER STATUS & BUTTON */}
-              <div className="pr-4 flex flex-col justify-between items-end">
-                {/* ::User Online Status */}
-                {/* ::Details button */}
-                <p className="text-sm text-gray-500 font-medium">
-                  {board.author}
-                </p>
-                <p className="text-sm text-gray-500 font-semibold hover:underline hover:text-gray-700">
-                  {moment(board.createdDate).fromNow()}
-                </p>
-              </div>
-            </div>
+            </Link>
           </li>
         ))}
       </ul>

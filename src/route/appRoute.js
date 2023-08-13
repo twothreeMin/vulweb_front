@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ErrorPage from "../page/error-page";
 import LoginPage from "../page/login";
 import SignupPage from "../page/signup";
+import { ArticleDetailPage } from "../page/articleDetailPage";
 import { DashBoardPage } from "../page/dashBoardPage";
 import { BoardEditorPage } from "../page/boardEditorPage";
 import { ManagerPage } from "../page/managerPage";
@@ -64,6 +65,10 @@ const AppRoutes = () => {
       <Route
         path="/manager"
         element={isAuthenticated ? <ManagerPage /> : <LoginPage />}
+      />
+      <Route
+        path="/article/:id"
+        element={isAuthenticated ? <ArticleDetailPage /> : <LoginPage />}
       />
       <Route path="/*" element={<ErrorPage />} />
     </Routes>
