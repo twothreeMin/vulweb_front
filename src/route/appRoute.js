@@ -13,6 +13,8 @@ import ErrorPage from "../page/error-page";
 import LoginPage from "../page/login";
 import SignupPage from "../page/signup";
 import { DashBoardPage } from "../page/dashBoardPage";
+import { BoardEditorPage } from "../page/boardEditorPage";
+import { ManagerPage } from "../page/managerPage";
 
 const AppRoutes = () => {
   console.log(`AppRoutes 렌더링`);
@@ -35,7 +37,7 @@ const AppRoutes = () => {
     }
 
     checkAuth(); // 페이지가 로드될 때마다 인증 상태를 체크합니다.
-  }, [location, checkAuth]);
+  }, [checkAuth]);
 
   if (isLoading) {
     return null; // 로딩 중일 때는 아무 것도 보여주지 않습니다
@@ -54,6 +56,14 @@ const AppRoutes = () => {
       <Route
         path="/board"
         element={isAuthenticated ? <DashBoardPage /> : <LoginPage />}
+      />
+      <Route
+        path="/boardEditor"
+        element={isAuthenticated ? <BoardEditorPage /> : <LoginPage />}
+      />
+      <Route
+        path="/manager"
+        element={isAuthenticated ? <ManagerPage /> : <LoginPage />}
       />
       <Route path="/*" element={<ErrorPage />} />
     </Routes>

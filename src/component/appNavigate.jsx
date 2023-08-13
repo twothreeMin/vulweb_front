@@ -1,27 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import { useMemberStore } from "../store/auth";
 import { useAuthStore } from "../store/auth";
+
+import { Link } from "react-router-dom";
 import axios from "axios";
 
-const user = {
-  name: "Tom Cook",
-  email: "tom@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
+// const user = {
+//   name: "Tom Cook",
+//   email: "tom@example.com",
+//   imageUrl:
+//     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+// };
+
 const navigation = [
-  { name: "Dashboard", href: "#", current: true }, // Dashboard Home
-  { name: "Board", href: "#", current: false }, // 게시판, 공지사항
-  { name: "Team", href: "#", current: false }, // 팀 멤버 확인
-  { name: "Managed", href: "#", current: false }, // 매니저만 들어갈수 있는 메뉴
+  { name: "공지사항", href: "/dashboard", current: false }, // Dashboard Home
+  { name: "게시판", href: "/board", current: true }, // 게시판, 공지사항
+  { name: "팀 구성원", href: "/team", current: false }, // 팀 멤버 확인
+  {
+    name: "관리자",
+    href: "/manager",
+    current: false,
+    requiredAuthority: "ROLE_MANAGER",
+  }, // 매니저만 들어갈수 있는 메뉴
 ];
+
 const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Sign out", href: "#" },
+  { name: "내 프로필", href: "#" },
+  { name: "로그아웃", href: "#" },
 ];
 
 function classNames(...classes) {
@@ -32,6 +41,7 @@ export const AppNavigate = (props) => {
   const navigate = useNavigate();
   let token = localStorage.getItem("access_token");
   const { member, fetchMemberInfo } = useMemberStore();
+  console.log("appnavigate!! ", member);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   //member 정보 가져오기
@@ -41,7 +51,7 @@ export const AppNavigate = (props) => {
   }, [token]);
 
   //클릭 시 로그아웃
-  const onClickHandler = () => {
+  const onClickSignOutHandler = () => {
     axios({
       method: "post",
       url: "http://localhost:8080/api/member/signout",
@@ -50,6 +60,7 @@ export const AppNavigate = (props) => {
     }).then((response) => {
       if (response.data.success) {
         localStorage.removeItem("access_token");
+        console.log("로그아웃!!!");
         useAuthStore.getState().setAuthenticated(false);
         navigate("/login");
       } else {
@@ -76,21 +87,30 @@ export const AppNavigate = (props) => {
                     </div>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
-                        {navigation.map((item) => (
-                          <a
-                            key={item.name}
-                            href={item.href}
-                            className={classNames(
-                              item.current
-                                ? "bg-gray-900 text-white"
-                                : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                              "rounded-md px-3 py-2 text-sm font-medium"
-                            )}
-                            aria-current={item.current ? "page" : undefined}
-                          >
-                            {item.name}
-                          </a>
-                        ))}
+                        {navigation.map((item) => {
+                          if (
+                            item.requiredAuthority &&
+                            item.requiredAuthority !== member?.authority
+                          ) {
+                            return null;
+                          }
+                          return (
+                            <Link to={item.href} key={item.name}>
+                              <Disclosure.Button
+                                as="a"
+                                className={classNames(
+                                  item.current
+                                    ? "bg-gray-900 text-white font-bold"
+                                    : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                                  "block rounded-md px-3 py-2 text-base font-medium"
+                                )}
+                                aria-current={item.current ? "page" : undefined}
+                              >
+                                {item.name}
+                              </Disclosure.Button>
+                            </Link>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
@@ -135,8 +155,8 @@ export const AppNavigate = (props) => {
                                       "block px-4 py-2 text-sm text-gray-700"
                                     )}
                                     onClick={
-                                      item.name === "Sign out"
-                                        ? onClickHandler
+                                      item.name === "로그아웃"
+                                        ? onClickSignOutHandler
                                         : ""
                                     }
                                   >
@@ -173,20 +193,20 @@ export const AppNavigate = (props) => {
               <Disclosure.Panel className="md:hidden">
                 <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
                   {navigation.map((item) => (
-                    <Disclosure.Button
-                      key={item.name}
-                      as="a"
-                      href={item.href}
-                      className={classNames(
-                        item.current
-                          ? "bg-gray-900 text-white"
-                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                        "block rounded-md px-3 py-2 text-base font-medium"
-                      )}
-                      aria-current={item.current ? "page" : undefined}
-                    >
-                      {item.name}
-                    </Disclosure.Button>
+                    <Link to={item.href} key={item.name}>
+                      <Disclosure.Button
+                        as="a"
+                        className={classNames(
+                          item.current
+                            ? "bg-gray-900 text-white font-bold"
+                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                          "block rounded-md px-3 py-2 text-base font-medium"
+                        )}
+                        aria-current={item.current ? "page" : undefined}
+                      >
+                        {item.name}
+                      </Disclosure.Button>
+                    </Link>
                   ))}
                 </div>
                 <div className="border-t border-gray-700 pb-3 pt-4">
@@ -235,7 +255,7 @@ export const AppNavigate = (props) => {
         <header className="bg-white shadow">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              Dashboard
+              게시판
             </h1>
           </div>
         </header>

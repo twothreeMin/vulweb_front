@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { ArticleList } from "./component/articleList";
 import { Pagination } from "./component/pagination";
-import { Writer } from "./component/writer";
+import { EditorButton } from "./component/editorButton";
 
 import { useLocation } from "react-router-dom";
 import { useAuthStore } from "../../store/auth";
@@ -27,7 +27,7 @@ export const Board = () => {
 
   return (
     <>
-      <Writer />
+      <EditorButton />
       <ArticleList />
       <Pagination />
     </>

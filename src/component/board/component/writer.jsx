@@ -1,17 +1,73 @@
+import { useArticleReqStore } from "../../../store/article";
+
+import axios from "axios";
+
 export const Writer = () => {
+  const { title, content, setTitle, setContent, resetFields } =
+    useArticleReqStore();
+  const token = localStorage.getItem("access_token");
+
+  const addArticleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("addArticleSubmit!!!");
+
+    try {
+      const response = await axios.post(
+        "/api/create/article",
+        {
+          title: title,
+          content: content,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 201) {
+        console.log("Article created successfully:", response.data);
+        resetFields();
+      }
+    } catch (error) {
+      console.error("Error creating article:", error);
+    }
+  };
+
   return (
     <div className="mx-auto w-full max-w-5xl bg-white">
-      <form>
+      <form onSubmit={addArticleSubmit}>
         <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50">
+          <div className="mb-6">
+            <label
+              for="title"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Default input
+            </label>
+            <input
+              type="text"
+              id="title"
+              className="bg-gray-50 text-sm border 
+              border-gray-400 text-gray-900 
+              text-sm rounded-lg 
+              focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Write a title..."
+            />
+          </div>
           <div className="px-4 py-2 bg-white rounded-t-lg">
-            <label htmlFor="comment" className="sr-only">
-              Your comment
+            <label htmlFor="content" className="sr-only">
+              content
             </label>
             <textarea
-              id="comment"
+              id="content"
               rows="4"
-              className="w-full px-0 text-sm text-gray-900 bg-white border-0 focus:ring-0"
-              placeholder="Write a comment..."
+              className="w-full px-0 text-sm border-gray-400 text-gray-900 bg-white border-0 focus:ring-0"
+              placeholder="Write a content..."
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
               required
             ></textarea>
           </div>
