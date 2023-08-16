@@ -17,6 +17,8 @@ import { DashBoardPage } from "../page/dashBoardPage";
 import { BoardEditorPage } from "../page/boardEditorPage";
 import { ManagerPage } from "../page/managerPage";
 import { ProfilePage } from "../page/profilePage";
+import { NoticeBoardPage } from "../page/noticeBoardPage";
+import { NoticeEditorPage } from "../page/noticeEditorPage";
 
 const AppRoutes = () => {
   console.log(`AppRoutes 렌더링`);
@@ -70,6 +72,14 @@ const AppRoutes = () => {
       <Route
         path="/boardEditor/:id"
         element={isAuthenticated ? <BoardEditorPage /> : <LoginPage />}
+      />
+      <Route
+        path="/notice"
+        element={isAuthenticated ? <NoticeBoardPage /> : <LoginPage />}
+      />
+      <Route
+        path="/noticeEditor"
+        element={isAuthenticated ? <NoticeEditorPage /> : <LoginPage />}
       />
       <Route
         path="/manager"

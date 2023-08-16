@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import { useMemberStore } from "../store/auth";
 import { useAuthStore } from "../store/auth";
+import { useMenuStore } from "../store/menu";
 
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -17,7 +19,7 @@ import axios from "axios";
 // };
 
 const navigation = [
-  { name: "공지사항", href: "/dashboard", current: false }, // Dashboard Home
+  { name: "공지사항", href: "/notice", current: false }, // Dashboard Home
   { name: "게시판", href: "/board", current: true }, // 게시판, 공지사항
   { name: "팀 구성원", href: "/team", current: false }, // 팀 멤버 확인
   {
@@ -38,6 +40,9 @@ function classNames(...classes) {
 }
 
 export const AppNavigate = (props) => {
+  const location = useLocation();
+  const { activeItem, setActiveItem } = useMenuStore();
+
   const navigate = useNavigate();
   let token = localStorage.getItem("access_token");
   const { member, fetchMemberInfo } = useMemberStore();
@@ -48,6 +53,8 @@ export const AppNavigate = (props) => {
   useEffect(() => {
     console.log("appNavigate!! : ", token);
     fetchMemberInfo(token);
+    setActiveItem(location.pathname);
+    console.log("location!!", location.pathname);
   }, [token]);
 
   //클릭 시 프로필이동
@@ -104,12 +111,14 @@ export const AppNavigate = (props) => {
                               <Disclosure.Button
                                 as="a"
                                 className={classNames(
-                                  item.current
+                                  activeItem === item.href
                                     ? "bg-gray-900 text-white font-bold"
                                     : "text-gray-300 hover:bg-gray-700 hover:text-white",
                                   "block rounded-md px-3 py-2 text-base font-medium"
                                 )}
-                                aria-current={item.current ? "page" : undefined}
+                                aria-current={
+                                  activeItem === item.href ? "page" : undefined
+                                }
                               >
                                 {item.name}
                               </Disclosure.Button>
@@ -202,12 +211,14 @@ export const AppNavigate = (props) => {
                       <Disclosure.Button
                         as="a"
                         className={classNames(
-                          item.current
+                          activeItem === item.href
                             ? "bg-gray-900 text-white font-bold"
                             : "text-gray-300 hover:bg-gray-700 hover:text-white",
                           "block rounded-md px-3 py-2 text-base font-medium"
                         )}
-                        aria-current={item.current ? "page" : undefined}
+                        aria-current={
+                          activeItem === item.href ? "page" : undefined
+                        }
                       >
                         {item.name}
                       </Disclosure.Button>
